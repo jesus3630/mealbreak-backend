@@ -21,7 +21,11 @@ export class CompaniesService implements OnApplicationBootstrap {
       const dataPath = path.join(__dirname, '../../../companies_data.js');
       const websitesPath = path.join(__dirname, '../../../company_websites.js');
 
-      if (!fs.existsSync(dataPath)) return;
+      console.log(`Seed: looking for data at ${dataPath}`);
+      if (!fs.existsSync(dataPath)) {
+        console.error(`Seed: file not found at ${dataPath}`);
+        return;
+      }
 
       let dataContent = fs.readFileSync(dataPath, 'utf8');
       let websitesContent = fs.existsSync(websitesPath)
@@ -64,7 +68,7 @@ export class CompaniesService implements OnApplicationBootstrap {
         .execute();
       console.log(`Seeded ${batch.length} companies into database.`);
     } catch (err) {
-      console.error('Seed error:', err.message);
+      console.error('Seed error:', err.message, err.stack);
     }
   }
 
